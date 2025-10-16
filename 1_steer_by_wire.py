@@ -48,16 +48,16 @@ def goTo(controller, target, time = 1., dt = 0.005, motorid =1):
     mc.applyTorqueToMotor(1, 0)
     mc.applyTorqueToMotor(2, 0)
     
-    time_values = [i * dt for i in range(len(anglevalues))]
-    # Plotting the angle values
-    plt.figure(figsize=(10, 5))
-    plt.plot(time_values, anglevalues, marker='o', linestyle='-')
-    plt.axhline(y=target, color='r', linestyle='--', label='Target Value')  # Add horizontal line for target
-    plt.title('Motor Angle Values Over Time')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Angle Values (% 2Pi)')
-    plt.grid()
-    plt.show()
+    # time_values = [i * dt for i in range(len(anglevalues))]
+    # # Plotting the angle values
+    # plt.figure(figsize=(10, 5))
+    # plt.plot(time_values, anglevalues, marker='o', linestyle='-')
+    # plt.axhline(y=target, color='r', linestyle='--', label='Target Value')  # Add horizontal line for target
+    # plt.title('Motor Angle Values Over Time')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Angle Values (% 2Pi)')
+    # plt.grid()
+    # plt.show()
 
 
 
@@ -98,8 +98,13 @@ dt = 0.005
 N = int(2. / dt)
 
 try:    
-    pdc = PDController(0.00016,0.001*dt)
-    goTo(pdc, 200, time = 1.5)
+    pdc = PDController(0.0001,0.001*dt)
+    for i in range(300):
+        pos_1 = mc.readPosition(1)
+        pos_2 = mc.readPosition(2)
+        print(pos_1, pos_2)
+        goTo(pdc, pos_1, time = 0.05, motorid=2)
+        goTo(pdc, pos_2, time = 0.05, motorid=1)
 except KeyboardInterrupt:
     print("KeyboardInterrupt received, stopping motors...")
 except Exception as e:
